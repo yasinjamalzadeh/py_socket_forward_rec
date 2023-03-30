@@ -76,4 +76,4 @@ def forward(source, destination):
 
 
 if __name__ == '__main__':
-    main('port-forward.config', sys.argv[1:])
+    main('pyrec.config', sys.argv[1:])
