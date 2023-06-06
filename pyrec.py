@@ -52,6 +52,7 @@ def parse_args(args):
 def server(*settings):
     try:
         dock_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        dock_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         dock_socket.bind(('', settings[0]))
         dock_socket.listen()
         while True:
@@ -69,7 +70,7 @@ def forward(source, destination):
         string = source.recv(1024)
         if string:
             destination.sendall(string)
-            print(string)
+            # print(string)
         else:
             source.shutdown(socket.SHUT_RD)
             destination.shutdown(socket.SHUT_WR)
