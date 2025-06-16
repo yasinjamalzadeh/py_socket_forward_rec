@@ -65,15 +65,25 @@ def server(*settings):
         _thread.start_new_thread(server, settings)
 
 def forward(source, destination):
-    string = ' '
-    while string:
-        string = source.recv(1024)
-        if string:
-            destination.sendall(string)
-            # print(string)
-        else:
-            source.shutdown(socket.SHUT_RD)
-            destination.shutdown(socket.SHUT_WR)
+    source.settimeout(10)
+    destination.settimeout(10)
+
+    try:
+        while True:
+            try:
+                string = source.recv(1024)
+                if not string:
+                    break
+                destination.sendall(string)
+            except (ConnectionResetError, BrokenPipeError) as e:
+                print(f"Socket error: {e}")
+                break
+            except socket.timeout:
+                print("Socket timeout")
+                break
+    finally:
+        source.close()
+        destination.close()
 
 
 if __name__ == '__main__':
