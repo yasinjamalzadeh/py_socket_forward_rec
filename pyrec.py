@@ -78,6 +78,13 @@ def forward(source, destination):
             except (ConnectionResetError, BrokenPipeError) as e:
                 print(f"Socket error: {e}")
                 break
+            except OSError as e:
+                if e.errno == 9:
+                    print("[!] Bad file descriptor. Closing thread.")
+                    return 
+                else:
+                    print(f"OSError: {e}")
+                    break
             except socket.timeout:
                 print("Socket timeout")
                 break
