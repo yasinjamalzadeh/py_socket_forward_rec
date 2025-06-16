@@ -27,9 +27,14 @@ def main(setup,  args):
         # read settings for port forwarding
         for settings in parse(setup):
             _thread.start_new_thread(server, settings)
-    # wait for <ctrl-c>
+    _thread.start_new_thread(heartbeat, ())
     while True:
        time.sleep(60)
+
+def heartbeat():
+    while True:
+        print("Heartbeat...")
+        time.sleep(10)
 
 def parse(setup):
     settings = list()
