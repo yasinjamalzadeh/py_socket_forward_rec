@@ -82,6 +82,14 @@ def forward(source, destination):
                 print("Socket timeout")
                 break
     finally:
+        try:
+            source.shutdown(socket.SHUT_RD)
+        except Exception:
+            pass
+        try:
+            destination.shutdown(socket.SHUT_WR)
+        except Exception:
+            pass
         source.close()
         destination.close()
 
